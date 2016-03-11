@@ -1,8 +1,10 @@
+package expander;
+
 
 import java.io.IOException;
 
 
-class IOExpander {
+public class IOExpander {
 
     private int device;
 
@@ -166,7 +168,7 @@ class IOExpander {
         }
     };
 
-    IOExpander(Wire wire) {
+    public IOExpander(Wire wire) {
         this.wire = wire;
         this.device = 0x20;
     }
@@ -176,7 +178,7 @@ class IOExpander {
      *
      * @param device            The device address, or just the last 3 pins combination;
      */
-    void begin(int device) {
+    public void begin(int device) {
         this.device |= device & 0x07;
     }
 
@@ -186,7 +188,7 @@ class IOExpander {
      * @param pin               The pin number.
      * @param Direction         1 means input, 0 means output.
      */
-    void pinMode(Pin pin, Direction direction) throws IOException {
+    public void pinMode(Pin pin, Direction direction) throws IOException {
         Port port = pinToPort(pin);
         configureRegisterBits(port.getDirectionRegister(), (byte) (1 << (pin.getNumber() % 8)), (byte) direction.getDirection());
     }
@@ -197,7 +199,7 @@ class IOExpander {
      * @param port              The port.
      * @param mode              The mode.
      */
-    void portMode(Port port, int mode) throws IOException {  
+    public void portMode(Port port, int mode) throws IOException {  
         Register reg = port.getDirectionRegister();
         writeRegister(reg, (byte) mode);
     }
@@ -208,7 +210,7 @@ class IOExpander {
      * @param pin               The pin number.
      * @param value             LOW or WRITE.
      */
-    void digitalWrite(Pin pin, boolean value) throws IOException {
+    public void digitalWrite(Pin pin, boolean value) throws IOException {
         Port port = pinToPort(pin);
         configureRegisterBits(port.getIORegister(), (byte) (1 << (pin.getNumber() % 8)), (byte) ((value) ? 0xff : 0x00));
     }
@@ -218,7 +220,7 @@ class IOExpander {
      *
      * @param pin               The pin number.
      */
-    boolean digitalRead(Pin pin) throws IOException {    
+    public boolean digitalRead(Pin pin) throws IOException {    
         Port port = pinToPort(pin);
         return (readRegister(port.getIORegister()) & (1 << (pin.getNumber() % 8))) > 0;  
     }
@@ -229,7 +231,7 @@ class IOExpander {
      * @param port              The port to write.
      * @param value             The value to write to the port.
      */
-    void portWrite(Port port, byte value) throws IOException {
+    public void portWrite(Port port, byte value) throws IOException {
         writeRegister(port.getIORegister(), value);
     }
 
@@ -239,7 +241,7 @@ class IOExpander {
      * @param port              The port to write.
      * @return                  The value associated with the port.
      */
-    int portRead(Port port) throws IOException {
+    public int portRead(Port port) throws IOException {
         return readRegister(port.getIORegister());
     }
 
@@ -249,7 +251,7 @@ class IOExpander {
      * @param pin               The pin number.
      * @param pullUp            0 means with, 1 means witout pullup.
      */
-    void setPinPullUp(Pin pin, boolean pullUp) throws IOException {
+    public void setPinPullUp(Pin pin, boolean pullUp) throws IOException {
         Port port = pinToPort(pin);
         configureRegisterBits(port.getPullUpRegister(), (byte) (1 << (pin.getNumber() % 8)), (byte) ((pullUp) ? 0xff : 0x00));
     }
@@ -260,7 +262,7 @@ class IOExpander {
      * @param pin               The pin number.
      * @param pullUp            0 means normal, 1 means inverted polarity.
      */
-    void setPinPolarity(Pin pin, boolean polarity) throws IOException {
+    public void setPinPolarity(Pin pin, boolean polarity) throws IOException {
         Port port = pinToPort(pin);
         configureRegisterBits(port.getPinPolarityRegister(), (byte) (1 << (pin.getNumber() % 8)), (byte) ((polarity) ? 0xff : 0x00));
     }
@@ -271,7 +273,7 @@ class IOExpander {
      * @param pin               The pin number.
      * @param pullUp            0 means interrupt disable, 1 means interrupt enable.
      */
-    void setPinInterrupt(Pin pin, boolean interrupt) throws IOException {
+    public void setPinInterrupt(Pin pin, boolean interrupt) throws IOException {
         Port port = pinToPort(pin);
         configureRegisterBits(port.getPinInterruptRegister(), (byte) (1 << (pin.getNumber() % 8)), (byte) ((interrupt) ? 0xff : 0x00));
     }
@@ -281,7 +283,7 @@ class IOExpander {
      *
      * @param mode              The operation mode.
      */
-    void setSequentialOperationMode(SequentialOperationMode mode) {
+    public void setSequentialOperationMode(SequentialOperationMode mode) {
     }
 
     /**
@@ -291,7 +293,7 @@ class IOExpander {
      * @param mask          The mask to be used.
      * @param v             The value to be used.
      */
-    void configureRegisterBits(Register reg, byte mask, byte value) throws IOException {
+    public void configureRegisterBits(Register reg, byte mask, byte value) throws IOException {
         byte n;
         n = (byte) readRegister(reg);
         n &= ~(mask);
@@ -305,7 +307,7 @@ class IOExpander {
      * @param reg           The register number.
      * @param v             The value to be used.
      */
-    void writeRegister(Register reg, byte value) throws IOException {
+    public void writeRegister(Register reg, byte value) throws IOException {
         byte[] buf = new byte[] { reg.getAddress(), value };
         wire.beginTransmission(device);
         if (wire.writeBytes(buf, 2) != 2) {
@@ -320,7 +322,7 @@ class IOExpander {
      * @param reg           The register number.
      * @return              The register value.
      */
-    int readRegister(Register reg) throws IOException {      
+    public int readRegister(Register reg) throws IOException {      
         wire.beginTransmission(device);
         if (wire.writeBytes(new byte[] { reg.getAddress() }, 1) != 1) {
             throw new IOException("Cannot read from device.");

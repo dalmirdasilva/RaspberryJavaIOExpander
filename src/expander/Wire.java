@@ -1,8 +1,10 @@
-class Wire {
+package expander;
+
+public class Wire {
   
     int fd;
     
-    Wire() {
+    public Wire() {
         fd = -1;
     }
     
