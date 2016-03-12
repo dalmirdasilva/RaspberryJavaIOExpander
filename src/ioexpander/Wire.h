@@ -1,5 +1,5 @@
-#ifndef __RASPBERRY_Java_Wire_JNI_H__
-#define __RASPBERRY_Java_Wire_JNI_H__ 1
+#ifndef __RASPBERRY_Java_ioexpander_Wire_JNI_H__
+#define __RASPBERRY_Java_ioexpander_Wire_JNI_H__ 1
 
 #include <jni.h>
 #include <stdint.h>
@@ -21,12 +21,12 @@ extern "C" {
  * This should normally be called only once.
  * It maps the BSC0 (0x7E20_5000) registers.
  */
-JNIEXPORT jint JNICALL Java_Wire_begin(JNIEnv *env, jobject obj, jbyte channel);
+JNIEXPORT jint JNICALL Java_ioexpander_Wire_begin(JNIEnv *env, jobject obj, jbyte channel);
 
 /**
  * Unmap the BSC0 registers.
  */
-JNIEXPORT void JNICALL Java_Wire_stop(JNIEnv *env, jobject obj);
+JNIEXPORT void JNICALL Java_ioexpander_Wire_stop(JNIEnv *env, jobject obj);
 
 /**
  * Begin a transmission to the I2C slave device with the given 
@@ -35,7 +35,7 @@ JNIEXPORT void JNICALL Java_Wire_stop(JNIEnv *env, jobject obj);
  * 
  * @param address               The device address.
  */
-JNIEXPORT void JNICALL Java_Wire_beginTransmission(JNIEnv *env, jobject obj, jint address);
+JNIEXPORT void JNICALL Java_ioexpander_Wire_beginTransmission(JNIEnv *env, jobject obj, jint address);
 
 /**
  * Ends a transmission to a slave device that was begun by 
@@ -44,7 +44,7 @@ JNIEXPORT void JNICALL Java_Wire_beginTransmission(JNIEnv *env, jobject obj, jin
  * 
  * @return                      Nothing for now.
  */
-JNIEXPORT jbyte JNICALL Java_Wire_endTransmission(JNIEnv *env, jobject obj);
+JNIEXPORT jbyte JNICALL Java_ioexpander_Wire_endTransmission(JNIEnv *env, jobject obj);
 
 /**
  * Used to request bytes from a slave device. The bytes may then be 
@@ -54,7 +54,7 @@ JNIEXPORT jbyte JNICALL Java_Wire_endTransmission(JNIEnv *env, jobject obj);
  * @param len                   The length of data. Need be <= 16 
  *                              due the FIFO limits.
  */
-JNIEXPORT jbyte JNICALL Java_Wire_requestFrom(JNIEnv *env, jobject obj, jint address, jint len);
+JNIEXPORT jbyte JNICALL Java_ioexpander_Wire_requestFrom(JNIEnv *env, jobject obj, jint address, jint len);
 
 /**
  * Queues bytes for transmission to slave device (in-between calls 
@@ -64,7 +64,7 @@ JNIEXPORT jbyte JNICALL Java_Wire_requestFrom(JNIEnv *env, jobject obj, jint add
  * @param len                   The number of byte to be queued.
  * @return                      The number of accepted bytes.
  */
-JNIEXPORT jint JNICALL Java_Wire_writeBytes(JNIEnv *env, jobject obj, jbyteArray buf, jint len);
+JNIEXPORT jint JNICALL Java_ioexpander_Wire_writeBytes(JNIEnv *env, jobject obj, jbyteArray buf, jint len);
 
 /**
  * Returns 1 if there is one or more bytes to be read.
@@ -72,7 +72,7 @@ JNIEXPORT jint JNICALL Java_Wire_writeBytes(JNIEnv *env, jobject obj, jbyteArray
  * @return                      0 if there is no bytes to be read in
  *                              the internal FIFO.
  */
-JNIEXPORT jint JNICALL Java_Wire_available(JNIEnv *env, jobject obj);
+JNIEXPORT jint JNICALL Java_ioexpander_Wire_available(JNIEnv *env, jobject obj);
 
 /**
  * Reads a byte that was transmitted from a slave device to a master
@@ -80,25 +80,25 @@ JNIEXPORT jint JNICALL Java_Wire_available(JNIEnv *env, jobject obj);
  *
  * @return                      The byte read.
  */
-JNIEXPORT jint JNICALL Java_Wire_readByte(JNIEnv *env, jobject obj);
+JNIEXPORT jint JNICALL Java_ioexpander_Wire_readByte(JNIEnv *env, jobject obj);
 
 /**
  * For now, does nothing.
  */
-JNIEXPORT void JNICALL Java_Wire_flush(JNIEnv *env, jobject obj);
+JNIEXPORT void JNICALL Java_ioexpander_Wire_flush(JNIEnv *env, jobject obj);
 
 /**
  * Retrieve FD from object
  */
-int Java_Wire_getFileDescriptor(JNIEnv *env, jobject obj);
+int Java_ioexpander_Wire_getFileDescriptor(JNIEnv *env, jobject obj);
 
 /**
  * Set file descriptior field.
  */
-void Java_Wire_setFileDescriptor(JNIEnv *env, jobject obj, int fd);
+void Java_ioexpander_Wire_setFileDescriptor(JNIEnv *env, jobject obj, int fd);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __RASPBERRY_Java_Wire_JNI_H__ */
+#endif /* __RASPBERRY_Java_ioexpander_Wire_JNI_H__ */

@@ -1,13 +1,21 @@
-package expander;
+package ioexpander;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class Main {
 
     static {
-        System.load(Main.class.getResource("libwire.o").getPath());
+        try {
+            System.loadLibrary("wire");
+        } catch (UnsatisfiedLinkError e) {
+            String javaLibPath = System.getProperty("java.library.path");
+            Map<String, String> envVars = System.getenv();
+            System.out.println("Cannot find libwire.so in any of the following paths: " + javaLibPath);
+            System.exit(1);
+        }
     }
-
+    
     public static void main(String[] args) throws IOException, InterruptedException {
         Wire wire = new Wire();
         wire.begin((byte) 0);

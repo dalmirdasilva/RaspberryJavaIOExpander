@@ -2,6 +2,11 @@
 
 ## Setup
 
+### Export env variables
+```
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:<path/to/lib>
+```
+
 ### Compiling C++ code:
 ```
 g++ -fPIC -I$JAVA_HOME/include -I$JAVA_HOME/include/linux -shared -o libwire.o Wire.cpp

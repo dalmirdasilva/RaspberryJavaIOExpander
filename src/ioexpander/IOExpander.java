@@ -1,5 +1,4 @@
-package expander;
-
+package ioexpander;
 
 import java.io.IOException;
 
@@ -7,7 +6,6 @@ import java.io.IOException;
 public class IOExpander {
 
     private int device;
-
     private final Wire wire;
 
     public enum SequentialOperationMode {
@@ -186,7 +184,8 @@ public class IOExpander {
      * Configures the specified pin to behave either as an input or an output.
      *
      * @param pin               The pin number.
-     * @param Direction         1 means input, 0 means output.
+     * @param direction
+     * @throws java.io.IOException
      */
     public void pinMode(Pin pin, Direction direction) throws IOException {
         Port port = pinToPort(pin);
@@ -198,6 +197,7 @@ public class IOExpander {
      *
      * @param port              The port.
      * @param mode              The mode.
+     * @throws java.io.IOException
      */
     public void portMode(Port port, int mode) throws IOException {  
         Register reg = port.getDirectionRegister();
@@ -209,6 +209,7 @@ public class IOExpander {
      *
      * @param pin               The pin number.
      * @param value             LOW or WRITE.
+     * @throws java.io.IOException
      */
     public void digitalWrite(Pin pin, boolean value) throws IOException {
         Port port = pinToPort(pin);
@@ -219,6 +220,8 @@ public class IOExpander {
      * Reads the value from a specified pin, either HIGH or LOW.
      *
      * @param pin               The pin number.
+     * @return 
+     * @throws java.io.IOException
      */
     public boolean digitalRead(Pin pin) throws IOException {    
         Port port = pinToPort(pin);
@@ -230,6 +233,7 @@ public class IOExpander {
      *
      * @param port              The port to write.
      * @param value             The value to write to the port.
+     * @throws java.io.IOException
      */
     public void portWrite(Port port, byte value) throws IOException {
         writeRegister(port.getIORegister(), value);
@@ -240,6 +244,7 @@ public class IOExpander {
      *
      * @param port              The port to write.
      * @return                  The value associated with the port.
+     * @throws java.io.IOException
      */
     public int portRead(Port port) throws IOException {
         return readRegister(port.getIORegister());
@@ -250,6 +255,7 @@ public class IOExpander {
      *
      * @param pin               The pin number.
      * @param pullUp            0 means with, 1 means witout pullup.
+     * @throws java.io.IOException
      */
     public void setPinPullUp(Pin pin, boolean pullUp) throws IOException {
         Port port = pinToPort(pin);
@@ -260,7 +266,8 @@ public class IOExpander {
      * Configures the polarity for a given pin.
      *
      * @param pin               The pin number.
-     * @param pullUp            0 means normal, 1 means inverted polarity.
+     * @param polarity
+     * @throws java.io.IOException
      */
     public void setPinPolarity(Pin pin, boolean polarity) throws IOException {
         Port port = pinToPort(pin);
@@ -271,7 +278,8 @@ public class IOExpander {
      * Configures a pin to clear or set the interrupt.
      *
      * @param pin               The pin number.
-     * @param pullUp            0 means interrupt disable, 1 means interrupt enable.
+     * @param interrupt
+     * @throws java.io.IOException
      */
     public void setPinInterrupt(Pin pin, boolean interrupt) throws IOException {
         Port port = pinToPort(pin);
@@ -291,7 +299,8 @@ public class IOExpander {
      *
      * @param reg           The register number.
      * @param mask          The mask to be used.
-     * @param v             The value to be used.
+     * @param value
+     * @throws java.io.IOException
      */
     public void configureRegisterBits(Register reg, byte mask, byte value) throws IOException {
         byte n;
@@ -305,7 +314,8 @@ public class IOExpander {
      * Writes a value to a register.
      *
      * @param reg           The register number.
-     * @param v             The value to be used.
+     * @param value
+     * @throws java.io.IOException
      */
     public void writeRegister(Register reg, byte value) throws IOException {
         byte[] buf = new byte[] { reg.getAddress(), value };
@@ -321,6 +331,7 @@ public class IOExpander {
      *
      * @param reg           The register number.
      * @return              The register value.
+     * @throws java.io.IOException
      */
     public int readRegister(Register reg) throws IOException {      
         wire.beginTransmission(device);

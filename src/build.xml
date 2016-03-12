@@ -1,0 +1,55 @@
+<project name="RaspberryJavaIOExpander" basedir="." default="main">
+
+    <property environment="env"/>
+
+    <property name="src.dir" value="ioexpander"/>
+
+    <property name="build.dir" value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="jar.dir" value="${build.dir}/jar"/>
+    <property name="lib.dir" value="${build.dir}/lib"/>
+    <property name="main-class" value="${src.dir}.Main"/>
+    <property name="jni.include" value="${env.JAVA_HOME}/include"/>
+    <property name="jni.linux.include" value="${env.JAVA_HOME}/include/linux"/>
+    <property name="java.library.path" location=".:${lib.dir}"/>
+
+    <propertyset id="java.props">
+        <propertyref name="java.library.path"/>
+    </propertyset>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="${lib.dir}"/>
+        <mkdir dir="${classes.dir}"/>
+        <javac includeantruntime="true" srcdir="${src.dir}" destdir="${classes.dir}">
+            <include name="${jni.include}"/>
+            <include name="${jni.linux.include}"/>
+            <include name="**/*.jar"/>
+            <include name="**/*.java"/>
+        </javac>
+        <exec executable="g++">
+            <arg line="-I${src.dir}/ -I${jni.include} -I${jni.linux.include} -fPIC -shared -o ${lib.dir}/libwire.so ${src.dir}/Wire.cpp"/>
+        </exec>
+    </target>
+
+    <target name="jar" depends="compile">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run" depends="jar">
+        <java jar="${jar.dir}/${ant.project.name}.jar" fork="true" />
+    </target>
+
+    <target name="clean-build" depends="clean,jar"/>
+
+    <target name="main" depends="clean,run"/>
+
+</project>

@@ -1,4 +1,4 @@
-package expander;
+package ioexpander;
 
 public class Wire {
   
