@@ -1,7 +1,6 @@
 package ioexpander;
 
 import java.io.IOException;
-import java.util.Map;
 
 public class Main {
 
@@ -10,7 +9,6 @@ public class Main {
             System.loadLibrary("wire");
         } catch (UnsatisfiedLinkError e) {
             String javaLibPath = System.getProperty("java.library.path");
-            Map<String, String> envVars = System.getenv();
             System.out.println("Cannot find libwire.so in any of the following paths: " + javaLibPath);
             System.exit(1);
         }
